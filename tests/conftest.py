@@ -1,21 +1,32 @@
 import os
+
 import pytest
 from dotenv import load_dotenv
+from selene import browser, support
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selene import browser, support
+
 from utils import attach
 
+
 @pytest.fixture(scope="function")
-def setup_browser():
+def setup_chrome_browser():
     """Фикстура для настройки и управления браузером Chrome через Selene"""
 
     # 2. Настройка опций Chrome
     chrome_options = Options()
-    chrome_options.add_argument("--no-sandbox")  # Отключает sandbox (часто нужно в CI/CD)
-    chrome_options.add_argument("--disable-dev-shm-usage")  # Решает проблемы с памятью
-    chrome_options.add_argument("--disable-gpu")  # Отключает GPU (для стабильности)
-    chrome_options.add_argument("--window-size=1920,1080")  # Устанавливает размер окна
+    chrome_options.add_argument(
+        "--no-sandbox"
+    )  # Отключает sandbox (часто нужно в CI/CD)
+    chrome_options.add_argument(
+        "--disable-dev-shm-usage"
+    )  # Решает проблемы с памятью
+    chrome_options.add_argument(
+        "--disable-gpu"
+    )  # Отключает GPU (для стабильности)
+    chrome_options.add_argument(
+        "--window-size=1920,1080"
+    )  # Устанавливает размер окна
     # chrome_options.add_argument("--headless")  # Раскомментировать для безголового режима
 
     # 3. Создание драйвера с нашими опциями
@@ -46,9 +57,12 @@ def setup_browser():
         browser.quit()
 
 
-@pytest.fixture(scope='function')
-def setup_selenoid_browser():
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env"))
+@pytest.fixture(scope="function")
+def setup_browser():
+    """Фикстура для настройки и управления браузером Chrome через Selenoid"""
+    load_dotenv(
+        dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env")
+    )
 
     selenoid_login = os.getenv("SELENOID_LOGIN")
     selenoid_pass = os.getenv("SELENOID_PASS")
@@ -59,17 +73,14 @@ def setup_selenoid_browser():
     selenoid_capabilities = {
         "browserName": "chrome",
         "browserVersion": "127.0",
-        "selenoid:options": {
-            "enableVNC": True,
-            "enableVideo": True
-        }
+        "selenoid:options": {"enableVNC": True, "enableVideo": True},
     }
     options.capabilities.update(selenoid_capabilities)
 
     # Создаем драйвер для Selenoid
     driver = webdriver.Remote(
         command_executor=f"https://{selenoid_login}:{selenoid_pass}@{selenoid_url}/wd/hub",
-        options=options
+        options=options,
     )
 
     # Настройка Selene с созданным драйвером
