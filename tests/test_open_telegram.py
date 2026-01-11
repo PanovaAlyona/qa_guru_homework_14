@@ -1,6 +1,6 @@
 import allure
-from qa_guru_homework_14.find_steps import FindSteps
 
+from qa_guru_homework_14.find_steps import FindSteps
 
 
 @allure.title("Открыть контакты автора в телеграм")
@@ -14,4 +14,3 @@ def test_open_telegram(setup_browser):
     find_steps.close_welcome_modal()
     find_steps.open_telegram_contact()
     find_steps.check_telegram_contact()
-

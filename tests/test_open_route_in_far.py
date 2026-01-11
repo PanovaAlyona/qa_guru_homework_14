@@ -1,4 +1,5 @@
 import allure
+
 from qa_guru_homework_14.find_steps import FindSteps
 from qa_guru_homework_14.mountain import Mountain
 
@@ -24,7 +25,6 @@ def test_find_mountain_and_route(setup_browser):
     find_steps.find_routes_by_peak_name(mountain.name)
 
     find_steps.open_route_in_far(mountain.route_list[0])
-    find_steps.check_table_values(f'6.1.1.'+mountain.name, mountain.route_list[0])
-
-
-
+    find_steps.check_table_values(
+        f"6.1.1." + mountain.name, mountain.route_list[0]
+    )

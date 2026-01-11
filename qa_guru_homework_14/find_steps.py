@@ -1,7 +1,7 @@
 import time
 
 import allure
-from selene import be, by, have, query, browser
+from selene import be, browser, by, have, query
 from selene.core.command import js
 from selenium.webdriver.common.by import By
 
@@ -60,17 +60,13 @@ class FindSteps:
     @allure.step("Найти маршруты на выбранный пик")
     def find_routes_by_peak_name(self, name):
         # Поиск по названию пика вершины
-        peak_element = self.driver.element(
-            f'//div[text()="{name}"]'
-        )
+        peak_element = self.driver.element(f'//div[text()="{name}"]')
         peak_element.should(be.visible).click()
 
     @allure.step("Проверить отображение указателя на пик на карте")
     def check_visible_peak_pointer(self, name):
         # Поиск отображения указателя для пика вершины
-        elbrus_marker = self.driver.element(
-            f'img[alt="{name}"]'
-        )
+        elbrus_marker = self.driver.element(f'img[alt="{name}"]')
         elbrus_marker.with_(timeout=10).should(be.visible)
 
     @allure.step(
@@ -94,28 +90,32 @@ class FindSteps:
     def filter_mount_by_categories(self, category: Category):
 
         # Раскрыть фильтр
-        filter_button = browser.all('[id^="headlessui-disclosure-button-"]').element_by(have.text('Фильтр'))
+        filter_button = browser.all(
+            '[id^="headlessui-disclosure-button-"]'
+        ).element_by(have.text("Фильтр"))
         filter_button.click()
 
         # Выбрать нужные чек-боксы
-        checkbox_category = browser.element(f'#capability-{category.category}')
+        checkbox_category = browser.element(f"#capability-{category.category}")
         checkbox_category.should(be.visible)
         checkbox_category.click()
 
         # Применить фильтр
-        browser.all('button').element_by(have.text('Применить')).should(be.visible).click()
+        browser.all("button").element_by(have.text("Применить")).should(
+            be.visible
+        ).click()
 
     @allure.step("Проверить наличие категорий у гор в результате фильтрации")
     def check_mountains_category(self, category: Category):
         """Проверить, что все видимые вершины содержат категорию 5А"""
 
         # Найти контейнер видимых вершин
-        #visible_peaks_container = (browser.element('div:has-text("Видимые вершины:")').should(be.visible).find('..'))
-        title_div = browser.element('div.text-lg.text-gray-600')
+        # visible_peaks_container = (browser.element('div:has-text("Видимые вершины:")').should(be.visible).find('..'))
+        title_div = browser.element("div.text-lg.text-gray-600")
         title_div.should(be.visible)
-        visible_peaks_container = title_div.element('./..')
+        visible_peaks_container = title_div.element("./..")
         # Найти все карточки вершин внутри контейнера
-        peak_cards = visible_peaks_container.all('button[aria-label]')
+        peak_cards = visible_peaks_container.all("button[aria-label]")
 
         peak_cards_list = peak_cards  # Получаем список элементов
         peak_count = len(peak_cards_list)
@@ -130,35 +130,40 @@ class FindSteps:
 
     @allure.step("Проверить отсутствие результата фильтрации")
     def check_mount_not_found(self):
-        browser.element(by.text('Нет вершин подходящих под выбранные фильтры')).should(be.existing)
+        browser.element(
+            by.text("Нет вершин подходящих под выбранные фильтры")
+        ).should(be.existing)
 
     @allure.step("Открыть маршрут на сайте ФАР")
     def open_route_in_far(self, route_name):
-        title = browser.all('h3').element_by(have.text(f"{route_name}"))
-        parent = title.element('./../..')
-        far_link = parent.all('a').element_by(have.text("ФАР"))
+        title = browser.all("h3").element_by(have.text(f"{route_name}"))
+        parent = title.element("./../..")
+        far_link = parent.all("a").element_by(have.text("ФАР"))
         far_link.click()
 
     @allure.step("Проверить корректность открытого маршрута")
     def check_table_values(self, mount_name, route_name):
         browser.switch_to_next_tab()
 
-        table = browser.element('.route-desc__table')
+        table = browser.element(".route-desc__table")
         table.should(be.existing)
         table.element(by.text(route_name)).should(be.existing)
         table.element(by.text(mount_name)).should(be.existing)
 
     @allure.step("Открыть контакты из телеграм")
     def open_telegram_contact(self):
-        filter_button = browser.all('[id^="headlessui-disclosure-button-"]').element_by(have.text('Полезные ссылки'))
+        filter_button = browser.all(
+            '[id^="headlessui-disclosure-button-"]'
+        ).element_by(have.text("Полезные ссылки"))
         filter_button.click()
 
-        link = browser.all(".flex-1.min-w-0").element_by(have.text('Написать автору'))
+        link = browser.all(".flex-1.min-w-0").element_by(
+            have.text("Написать автору")
+        )
 
         # 2. Проверить
         link.should(be.visible)
         link.click()
-
 
     @allure.step("Проверить, что открыты нужные контакты из телеграм")
     def check_telegram_contact(self):
@@ -169,7 +174,7 @@ class FindSteps:
             "https://t.me/alpmap/",
             "http://t.me/alpmap",
             "t.me/alpmap",
-            "t.me/alpmap/"
+            "t.me/alpmap/",
         ]
 
         # Проверить все варианты
@@ -185,13 +190,18 @@ class FindSteps:
             # Проверить частично
             if "t.me" in current_url and "alpmap" in current_url:
                 print(f"⚠ Частичное совпадение: {current_url}")
-                allure.attach(f"Частичное совпадение: {current_url}", name="Предупреждение")
+                allure.attach(
+                    f"Частичное совпадение: {current_url}",
+                    name="Предупреждение",
+                )
                 url_is_valid = True
 
         if url_is_valid:
             print(f"✓ Telegram контакт проверен: {current_url}")
             return True
         else:
-            error_msg = f"URL не соответствует Telegram. Получено: {current_url}"
+            error_msg = (
+                f"URL не соответствует Telegram. Получено: {current_url}"
+            )
             allure.attach(f"✗ {error_msg}", name="Ошибка")
             raise AssertionError(error_msg)

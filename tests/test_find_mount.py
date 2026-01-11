@@ -33,4 +33,3 @@ def test_find_mountain_and_route(setup_browser):
     find_steps.find_routes_by_peak_name(mountain.name)
     find_steps.check_visible_peak_pointer(mountain.name)
     find_steps.should_have_routes(mountain)
-
