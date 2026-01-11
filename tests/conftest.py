@@ -10,7 +10,7 @@ from utils import attach
 
 
 @pytest.fixture(scope="function")
-def setup_browser():
+def setup_browser_chrome():
     """Фикстура для настройки и управления браузером Chrome через Selene"""
 
     # 2. Настройка опций Chrome
@@ -58,7 +58,7 @@ def setup_browser():
 
 
 @pytest.fixture(scope="function")
-def setup_browser_test():
+def setup_browser():
     """Фикстура для настройки и управления браузером Chrome через Selenoid"""
     load_dotenv(
         dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env")
