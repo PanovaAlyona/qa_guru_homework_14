@@ -3,7 +3,7 @@ from qa_guru_homework_14.find_steps import FindSteps
 from qa_guru_homework_14.mountain import Mountain
 
 
-@allure.title("Поиск несуществующей горы")
+@allure.title("Открыть маршрут на сайте ФАР")
 @allure.epic("ALPMAP")
 @allure.feature("Поиск")
 def test_find_mountain_and_route(setup_browser):
