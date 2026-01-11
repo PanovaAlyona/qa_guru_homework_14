@@ -73,7 +73,7 @@ pytest .
 ---
 #### Пример отчета о прохождении ui-теста
 
-![Пример отчета о прохождении ui-тестов.png](media/images/allure_test_results.png)
+![Пример отчета о прохождении ui-тестов.png](media/images/allure_test_result.png)
 
 ---
 
