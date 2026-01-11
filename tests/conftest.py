@@ -2,7 +2,7 @@ import os
 
 import pytest
 from dotenv import load_dotenv
-from selene import browser, support
+from selene import browser
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
@@ -24,10 +24,7 @@ def setup_browser_chrome():
     chrome_options.add_argument(
         "--disable-gpu"
     )  # Отключает GPU (для стабильности)
-    chrome_options.add_argument(
-        "--window-size=1920,1080"
-    )  # Устанавливает размер окна
-    # chrome_options.add_argument("--headless")  # Раскомментировать для безголового режима
+    chrome_options.add_argument("--window-size=1920,1080")
 
     # 3. Создание драйвера с нашими опциями
     driver = webdriver.Chrome(options=chrome_options)

@@ -1,9 +1,5 @@
-import time
-
 import allure
 from selene import be, browser, by, have, query
-from selene.core.command import js
-from selenium.webdriver.common.by import By
 
 from qa_guru_homework_14.category import Category
 from qa_guru_homework_14.mountain import Mountain
@@ -109,8 +105,6 @@ class FindSteps:
     def check_mountains_category(self, category: Category):
         """Проверить, что все видимые вершины содержат категорию 5А"""
 
-        # Найти контейнер видимых вершин
-        # visible_peaks_container = (browser.element('div:has-text("Видимые вершины:")').should(be.visible).find('..'))
         title_div = browser.element("div.text-lg.text-gray-600")
         title_div.should(be.visible)
         visible_peaks_container = title_div.element("./..")

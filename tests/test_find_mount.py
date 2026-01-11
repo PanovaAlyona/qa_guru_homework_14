@@ -1,9 +1,5 @@
-import time
-
 import allure
-from selene import be, by, have, query
 
-from qa_guru_homework_14.category import Category
 from qa_guru_homework_14.find_steps import FindSteps
 from qa_guru_homework_14.mountain import Mountain
 
