@@ -67,7 +67,12 @@ def setup_browser():
     selenoid_capabilities = {
         "browserName": "chrome",
         "browserVersion": "127.0",
-        "selenoid:options": {"enableVNC": True, "enableVideo": True},
+        "selenoid:options": {
+            "enableVNC": True,
+            "enableVideo": True,
+            "sessionTimeout": "5m",  # Увеличиваем до 5 минут
+            "env": ["TZ=UTC"]
+        },
     }
     options.capabilities.update(selenoid_capabilities)
 
