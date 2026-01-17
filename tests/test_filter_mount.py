@@ -5,9 +5,9 @@ from pages.contact_steps import ContactSteps
 from pages.route_steps import RouteSteps
 
 
-@allure.title("Отфильтровать горы по категориям")
 @allure.epic("ALPMAP")
 @allure.feature("Поиск")
+@allure.title("Отфильтровать горы по категориям")
 def test_filter_by_category_mountain(setup_browser):
     browser = setup_browser
     route_steps = RouteSteps(browser)

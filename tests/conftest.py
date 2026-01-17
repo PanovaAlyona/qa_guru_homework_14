@@ -10,7 +10,7 @@ from utils import attach
 
 
 @pytest.fixture(scope="function")
-def setup_browser_r():
+def setup_browser_t():
     """Фикстура для настройки и управления браузером Chrome через Selene"""
 
     chrome_options = Options()
@@ -69,9 +69,10 @@ def setup_browser():
         "browserVersion": "127.0",
         "selenoid:options": {
             "enableVNC": True,
-            "enableVideo": True,
-            "sessionTimeout": "5m",  # Увеличиваем до 5 минут
-            "env": ["TZ=UTC"]
+            "enableVideo": True
+            # ,
+            # "sessionTimeout": "5m",  # Увеличиваем до 5 минут
+            # "env": ["TZ=UTC"]
         },
     }
     options.capabilities.update(selenoid_capabilities)
