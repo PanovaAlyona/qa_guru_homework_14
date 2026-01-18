@@ -1,5 +1,8 @@
+import logging
+
 import allure
 from selene import be, browser, by, have, query
+from selenium.common import TimeoutException
 
 from models.mountain import Mountain
 
@@ -97,8 +100,24 @@ class RouteSteps:
     def check_table_values(self, mount_name, route_name, region):
         browser.switch_to_next_tab()
 
-        table = browser.element(".route-desc__table")
-        table.should(be.existing)
-        table.element(by.text(route_name)).should(be.existing)
-        table.element(by.text(mount_name)).should(be.existing)
-        table.element(by.text(region)).should(be.existing)
+        # table = browser.element(".route-desc__table").should(be.visible, timeout=30)
+        # table.should(be.existing)
+        # table.element(by.text(route_name)).should(be.existing)
+        # table.element(by.text(mount_name)).should(be.existing)
+        # table.element(by.text(region)).should(be.existing)
+
+        try:
+            table = browser.element(".route-desc__table").should(be.visible, timeout=30)
+            table.should(be.existing)
+            table.element(by.text(route_name)).should(be.existing)
+            table.element(by.text(mount_name)).should(be.existing)
+            table.element(by.text(region)).should(be.existing)
+
+        except TimeoutException as e:
+            logging.error(f"Timeout waiting for elements: {str(e)}")
+            browser.save_screenshot("timeout_error.png")
+            raise
+        except AssertionError as e:
+            logging.error(f"Assertion failed: {str(e)}")
+            browser.save_screenshot("assertion_error.png")
+            raise
