@@ -1,12 +1,11 @@
 import allure
 from selene import be, browser, have
-from selenium.webdriver.common.by import By
 
 
-class ContactSteps:
+class ContactPages:
 
-    def __init__(self, driver):
-        self.driver = driver
+    def __init__(self):
+        self.browser = browser
 
     @allure.step("Открыть контакты из телеграм")
     def open_telegram_contact(self):
@@ -22,8 +21,7 @@ class ContactSteps:
         link.should(be.visible)
         link.click()
 
-
     @allure.step("Проверить, что открыты нужные контакты из телеграм")
     def check_telegram_contact(self, telegram: str):
         browser.switch_to_next_tab()
-        browser.element('.tgme_page_extra').should(have.exact_text(telegram))
+        browser.element(".tgme_page_extra").should(have.exact_text(telegram))

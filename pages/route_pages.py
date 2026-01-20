@@ -1,26 +1,26 @@
 import logging
 
 import allure
-from selene import be, browser, by, have, query
+from selene import be, browser, by, have
 from selenium.common import TimeoutException
 
 from models.mountain import Mountain
 
 
-class RouteSteps:
-
-    def __init__(self, driver):
-        self.driver = driver
+class RoutePages:
+    def __init__(self):
+        self.browser = browser
 
     @allure.step("Открыть сайт с вершинами и их маршрутами")
     def open(self, url="https://alpmap.ru/"):
-        self.driver.open(url)
+
+        self.browser.open(url)
 
     @allure.step("Найти пики у горы")
     def find_mount_by_name(self, mount_name):
 
         # Поиск по названию горы
-        search_field = self.driver.element(
+        search_field = self.browser.element(
             '[aria-label="Поиск по названию вершины"]'
         )
         search_field.should(be.visible.and_(be.enabled))
@@ -29,13 +29,13 @@ class RouteSteps:
     @allure.step("Найти маршруты на выбранный пик")
     def find_routes_by_peak_name(self, name):
         # Поиск по названию пика вершины
-        peak_element = self.driver.element(f'//div[text()="{name}"]')
+        peak_element = self.browser.element(f'//div[text()="{name}"]')
         peak_element.should(be.visible).click()
 
     @allure.step("Проверить отображение указателя на пик на карте")
     def check_visible_peak_pointer(self, name):
         # Поиск отображения указателя для пика вершины
-        mount_marker = self.driver.element(f'img[alt="{name}"]')
+        mount_marker = self.browser.element(f'img[alt="{name}"]')
         mount_marker.with_(timeout=10).should(be.visible)
 
     @allure.step(
@@ -44,7 +44,7 @@ class RouteSteps:
     def should_have_routes(self, mount: Mountain):
         """Проверяем, что таблица содержит все ожидаемые маршруты"""
 
-        routes_container = self.driver.element("div.flex.flex-col.gap-3")
+        routes_container = self.browser.element("div.flex.flex-col.gap-3")
         routes_container.should(be.visible)
 
         expected_routes = mount.route_list
@@ -100,14 +100,9 @@ class RouteSteps:
     def check_table_values(self, mount_name, route_name, region):
         browser.switch_to_next_tab()
 
-        # table = browser.element(".route-desc__table").should(be.visible, timeout=30)
-        # table.should(be.existing)
-        # table.element(by.text(route_name)).should(be.existing)
-        # table.element(by.text(mount_name)).should(be.existing)
-        # table.element(by.text(region)).should(be.existing)
-
         try:
-            table = browser.element(".route-desc__table").should(be.visible, timeout=30)
+
+            table = browser.element(".route-desc__table").should(be.existing)
             table.should(be.existing)
             table.element(by.text(route_name)).should(be.existing)
             table.element(by.text(mount_name)).should(be.existing)

@@ -14,24 +14,21 @@ def setup_browser_t():
     """Фикстура для настройки и управления браузером Chrome через Selene"""
 
     chrome_options = Options()
-    chrome_options.add_argument(
-        "--no-sandbox"
-    )
-    chrome_options.add_argument(
-        "--disable-dev-shm-usage"
-    )
-    chrome_options.add_argument(
-        "--disable-gpu"
-    )
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
 
     driver = webdriver.Chrome(options=chrome_options)
 
-    driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
-        'source': '''
+    driver.execute_cdp_cmd(
+        "Page.addScriptToEvaluateOnNewDocument",
+        {
+            "source": """
             window.localStorage.setItem('WELCOME_MODAL_DONT_SHOW', 'true');
-        '''
-    })
+        """
+        },
+    )
 
     browser.config.driver = driver
 
@@ -69,7 +66,7 @@ def setup_browser():
         "browserVersion": "127.0",
         "selenoid:options": {
             "enableVNC": True,
-            "enableVideo": True
+            "enableVideo": True,
             # ,
             # "sessionTimeout": "5m",  # Увеличиваем до 5 минут
             # "env": ["TZ=UTC"]
@@ -83,17 +80,20 @@ def setup_browser():
         options=options,
     )
 
-    driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
-        'source': '''
+    driver.set_window_size(1920, 1080)
+
+    driver.execute_cdp_cmd(
+        "Page.addScriptToEvaluateOnNewDocument",
+        {
+            "source": """
             window.localStorage.setItem('WELCOME_MODAL_DONT_SHOW', 'true');
-        '''
-    })
+        """
+        },
+    )
 
     # Настройка Selene с созданным драйвером
     browser.config.driver = driver
     browser.config.timeout = 10
-    browser.config.window_width = 1920
-    browser.config.window_height = 1080
 
     yield browser
 
