@@ -7,9 +7,7 @@ from selenium.common import TimeoutException
 from models.mountain import Mountain
 
 
-class RoutePages:
-    # def __init__(self):
-    #     self.browser = browser
+class RouteSteps:
 
     @allure.step("Открыть сайт с вершинами и их маршрутами")
     def open(self, url="https://alpmap.ru/"):

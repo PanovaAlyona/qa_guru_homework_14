@@ -2,10 +2,7 @@ import allure
 from selene import be, browser, have
 
 
-class ContactPages:
-
-    # def __init__(self):
-    #     self.browser = browser
+class ContactSteps:
 
     @allure.step("Открыть контакты из телеграм")
     def open_telegram_contact(self):

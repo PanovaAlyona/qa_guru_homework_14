@@ -1,19 +1,21 @@
 import allure
 
 from models.mountain import Mountain
-from pages.contact_pages import ContactPages
-from pages.route_pages import RoutePages
+from pages.home_page import HomePage
+from steps.contact_steps import ContactSteps
+from steps.route_steps import RouteSteps
 
 
 @allure.epic("ALPMAP")
 @allure.feature("Поиск")
 @allure.title("Отфильтровать горы по категориям")
 def test_filter_by_category_mountain(setup_browser):
-    route_pages = RoutePages()
-    route_pages.open(
+    homepage = HomePage()
+    homepage.open(
         "https://alpmap.ru/#?lng=102.31910705566408&zoom=12&lat=51.90721369567919"
     )
 
+    route_pages = RouteSteps()
     category = "5А"
 
     route_pages.filter_mount_by_categories(category)
@@ -24,7 +26,7 @@ def test_filter_by_category_mountain(setup_browser):
 @allure.epic("ALPMAP")
 @allure.feature("Поиск")
 def test_find_mountain_and_route(setup_browser):
-    route_pages = RoutePages()
+    route_pages = RouteSteps()
 
     mountain = Mountain(
         name="Эльбрус, Западная",
@@ -40,7 +42,8 @@ def test_find_mountain_and_route(setup_browser):
         number_region="2. КАВКАЗ",
     )
 
-    route_pages.open()
+    homepage = HomePage()
+    homepage.open()
     route_pages.find_mount_by_name("Эльбрус")
     route_pages.find_routes_by_peak_name(mountain.name)
     route_pages.check_visible_peak_pointer(mountain.name)
@@ -51,9 +54,9 @@ def test_find_mountain_and_route(setup_browser):
 @allure.epic("ALPMAP")
 @allure.feature("Поиск")
 def test_not_found_mount(setup_browser):
-    route_pages = RoutePages()
-
-    route_pages.open()
+    route_pages = RouteSteps()
+    homepage = HomePage()
+    homepage.open()
     route_pages.find_mount_by_name("123456789")
     route_pages.check_mount_not_found()
 
@@ -62,9 +65,10 @@ def test_not_found_mount(setup_browser):
 @allure.epic("ALPMAP")
 @allure.feature("Поиск")
 def test_open_route_in_far(setup_browser):
-    route_pages = RoutePages()
+    route_pages = RouteSteps()
 
-    route_pages.open()
+    homepage = HomePage()
+    homepage.open()
 
     mountain = Mountain(
         name="Мунку-Сардык",
@@ -90,9 +94,9 @@ def test_open_route_in_far(setup_browser):
 @allure.epic("ALPMAP")
 @allure.feature("Контакты")
 def test_open_telegram(setup_browser):
-    contact_pages = ContactPages()
-    route_pages = RoutePages()
+    homepage = HomePage()
+    homepage.open()
 
-    route_pages.open()
+    contact_pages = ContactSteps()
     contact_pages.open_telegram_contact()
     contact_pages.check_telegram_contact("@alpmap")
