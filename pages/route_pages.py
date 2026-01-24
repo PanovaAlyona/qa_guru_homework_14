@@ -8,19 +8,19 @@ from models.mountain import Mountain
 
 
 class RoutePages:
-    def __init__(self):
-        self.browser = browser
+    # def __init__(self):
+    #     self.browser = browser
 
     @allure.step("Открыть сайт с вершинами и их маршрутами")
     def open(self, url="https://alpmap.ru/"):
 
-        self.browser.open(url)
+        browser.open(url)
 
     @allure.step("Найти пики у горы")
     def find_mount_by_name(self, mount_name):
 
         # Поиск по названию горы
-        search_field = self.browser.element(
+        search_field = browser.element(
             '[aria-label="Поиск по названию вершины"]'
         )
         search_field.should(be.visible.and_(be.enabled))
@@ -29,13 +29,13 @@ class RoutePages:
     @allure.step("Найти маршруты на выбранный пик")
     def find_routes_by_peak_name(self, name):
         # Поиск по названию пика вершины
-        peak_element = self.browser.element(f'//div[text()="{name}"]')
+        peak_element = browser.element(f'//div[text()="{name}"]')
         peak_element.should(be.visible).click()
 
     @allure.step("Проверить отображение указателя на пик на карте")
     def check_visible_peak_pointer(self, name):
         # Поиск отображения указателя для пика вершины
-        mount_marker = self.browser.element(f'img[alt="{name}"]')
+        mount_marker = browser.element(f'img[alt="{name}"]')
         mount_marker.with_(timeout=10).should(be.visible)
 
     @allure.step(
@@ -44,7 +44,7 @@ class RoutePages:
     def should_have_routes(self, mount: Mountain):
         """Проверяем, что таблица содержит все ожидаемые маршруты"""
 
-        routes_container = self.browser.element("div.flex.flex-col.gap-3")
+        routes_container = browser.element("div.flex.flex-col.gap-3")
         routes_container.should(be.visible)
 
         expected_routes = mount.route_list
